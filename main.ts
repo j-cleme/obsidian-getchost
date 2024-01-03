@@ -88,12 +88,12 @@ export default class GetChost extends Plugin {
 		const parsedHTML = new DOMParser().parseFromString(html, "text/html");
 		const post: HTMLElement = parsedHTML.querySelector(
 			"article.co-post-box"
-		);
+		)!;
 		/// cleanup title section, detect and format asks
 		// check for post title
 		if (post.querySelector("a > h3")) {
 			let newEle = document.createElement("h3");
-			newEle.appendText(post.querySelector("a > h3")?.innerHTML);
+			newEle.appendText(post.querySelector("a > h3")?.innerHTML!);
 			post.querySelector("a:has(h3)")?.replaceWith(newEle);
 		}
 		// check for ask
@@ -104,7 +104,7 @@ export default class GetChost extends Plugin {
 				post.querySelector("div.co-embedded-ask")?.childNodes.length
 			) {
 				newEle.appendChild(
-					post.querySelector("div.co-embedded-ask")?.firstChild
+					post.querySelector("div.co-embedded-ask")?.firstChild!
 				);
 			}
 			post.querySelector("div.co-embedded-ask")?.replaceWith(newEle);
@@ -277,7 +277,7 @@ class GetChostSettingsTab extends PluginSettingTab {
 					.addOption("-", "Dash (-)")
 					.addOption("_", "Underscore (_)")
 					.setValue(this.plugin.settings.tagSpaceReplacer)
-					.onChange(async (value) => {
+					.onChange(async (value: "-" | "_") => {
 						this.plugin.settings.tagSpaceReplacer = value;
 						await this.plugin.saveSettings();
 					});
